@@ -13,7 +13,7 @@ app.use(cors({origin: "http://localhost:3000"}))
 
 app.get('/getCategories', async(req, res) => {
     // db.query(`SELECT * FROM products`).then((data) => console.log(data.rows ? data.rows[0] : ""));
-    res.send(["Hello", "World"]);
+    res.send(["Hello", "World", "Testing"]);
 });
 
 

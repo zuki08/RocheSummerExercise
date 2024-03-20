@@ -1,22 +1,46 @@
-import { useState } from "react";
-import DatePicker from "./formComponents/datePicker";
-import Categories from "./formComponents/categoryPicker";
+import { useEffect } from "react";
+import axios from "axios";
 
-export default function Form({ setForm }) {
-  const [date1, setDate1] = useState("");
-  const [date2, setDate2] = useState("");
-  const [categories, setCategories] = useState("");
-  const [minimumTotal, setTotal] = useState(0);
+import DatePicker from "./FormComponents/datePicker";
+import Categories from "./FormComponents/categoryPicker";
+import OrderMin from "./FormComponents/orderMin";
 
+export default function Form({ date1, date2, setDate1, setDate2, categories, setCategories, minimumTotal, setTotal, setForm }) {
+  useEffect(() => {
+    axios.get('http://localhost:8000/getCategories')
+    .then(function (response) {
+        setCategories(response.data.map(e => {
+            return {name:e, checked:false};
+        }));
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+  }, []);
   return (
-    <form>
+    <div>
       <DatePicker
         date1 = {date1}
         date2 = {date2}
         setDate1 = {setDate1}
         setDate2 = {setDate2}
       />
-      <Categories />
-    </form>
+      <Categories 
+        categories={categories} 
+        setCategories={setCategories}
+      />
+      <OrderMin 
+        minimumTotal={minimumTotal}
+        setTotal={setTotal}
+      />
+      <div className="flex items-center justify-center">
+        <button
+          onClick={() => setForm(false)}
+          className="bg-blue-300 m-2 p-2 rounded-md"
+        >
+          Generate
+        </button>
+      </div>
+    </div>
   );
 }

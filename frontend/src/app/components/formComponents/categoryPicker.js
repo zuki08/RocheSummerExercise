@@ -1,22 +1,28 @@
-import { useEffect, useState} from "react";
-import axios from "axios";
-export default function Categories(){
-    const[categories, setCategories] = useState([]);
-    useEffect(() => {
-        axios.get('http://localhost:8000/getCategories')
-        .then(function (response) {
-            console.log(response);
-            setCategories(response.data);
+export default function Categories({categories, setCategories}){
+    const handleCheck = (n) => {
+        let newList = categories.map(e => {
+            if(e.name === n){
+                e.checked = !e.checked;
+            }
+            return e;
         })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }, []);
-    console.log(categories);
+        setCategories(newList);
+    }
     return(
-        <div>
-            <ul className="p-2">
-                {categories.map((e, idx) => <li key={idx}>{e}</li>)}
+        <div className="mx-3">
+            <p>Filter categories: </p>
+            <ul className="flex flex-row flex-wrap">
+                {categories.map((e, idx) => {
+                    return(
+                        <li className="mx-2" key={idx}>
+                            <input type="checkbox" className="mx-1"
+                                checked = {e.checked}
+                                onChange={() => handleCheck(e.name)}
+                            />
+                            {e.name}
+                        </li>
+                    )
+                })}
             </ul>
         </div>
     );

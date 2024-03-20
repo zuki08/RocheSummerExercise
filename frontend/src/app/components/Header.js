@@ -5,7 +5,7 @@ export default function Header(){
             <div className="text-center">
                 <h1 className="text-[20px]">Report generation</h1>
             </div>
-            <div className="m-5">
+            <div className="m-3">
                 <p>Enter parameters to generate the report with: </p>
             </div>
         </div>
