@@ -1,6 +1,6 @@
-import Chart from "./Chart";
+import BarChart from "./Chart";
 
-export default function Report ( {data} ) {
+export default function Chart ( {data} ) {
     console.log(data);
     let categories = [];
     let totals = [];
@@ -11,7 +11,7 @@ export default function Report ( {data} ) {
 
     return (
         <div>
-            <Chart categories={categories} totals={totals}/>
+            <BarChart categories={categories} totals={totals}/>
         </div>
     )
 }

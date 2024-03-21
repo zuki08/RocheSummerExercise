@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-export default function Chart({categories, totals}) {
+export default function BarChart({categories, totals}) {
   ChartJS.register(
     CategoryScale,
     LinearScale,

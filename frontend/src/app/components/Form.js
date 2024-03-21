@@ -5,7 +5,7 @@ import DatePicker from "./FormComponents/datePicker";
 import Categories from "./FormComponents/categoryPicker";
 import OrderMin from "./FormComponents/orderMin";
 
-export default function Form({ date1, date2, setDate1, setDate2, categories, setCategories, minimumTotal, setTotal, setForm, setData }) {
+export default function Form({ date1, date2, setDate1, setDate2, categories, setCategories, minimumTotal, setTotal, setForm, setData, setTable }) {
   useEffect(() => {
     axios.get('http://localhost:8000/getCategories')
     .then(function (response) {
@@ -18,7 +18,17 @@ export default function Form({ date1, date2, setDate1, setDate2, categories, set
     });
   }, []);
 
-  const getFromDB = async () => {
+  const getFromDB = async (body) => {
+    let res = await axios.post("http://localhost:8000/getChartInfo", body);
+    console.log(res);
+    return res.data;
+  }
+  const getTable = async (body) => {
+    let res = await axios.post("http://localhost:8000/getTableData", body);
+    console.log(res);
+    return res.data;
+  }
+  const handleGetDB = () => {
     let catArr = categories.reduce((acc, elem) => {
       if(elem.checked){
         acc.push(elem.name);
@@ -31,16 +41,16 @@ export default function Form({ date1, date2, setDate1, setDate2, categories, set
       "categories": catArr,
       "minimumTotal": minimumTotal=== ""? 0 :minimumTotal
     };
-    let res = await axios.post("http://localhost:8000/getReportInfo", body);
-    console.log(res);
-    return res.data;
-  }
-  const handleGetDB = () => {
-    getFromDB()
-    .then(d => {
-      console.log(d);
-      setData(d);
-      setForm(false);
+    getFromDB(body).then(d => {
+      getTable(body).then(t => {
+        setData(d);
+        t.map(e => {
+          e.order_date = new Date(e.order_date).toDateString();
+          return e;
+        })
+        setTable(t);
+        setForm(false);
+      });
     })
     .catch(err => console.error(err));
   }
