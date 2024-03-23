@@ -7,12 +7,12 @@ import { useState } from "react";
 
 export default function Home() {
   const [form, setForm] = useState(true);
-  const [date1, setDate1] = useState("2023-05-12");
-  const [date2, setDate2] = useState("2023-05-21");
+  const [date1, setDate1] = useState("");
+  const [date2, setDate2] = useState("");
   const [categories, setCategories] = useState([]);
   const [minimumTotal, setTotal] = useState("");
   const [data, setData] = useState({});
-  const [tableData, setTable] = useState({});
+  const [tableData, setTable] = useState([]);
   
   let prop_map = {
     order_id: "Order ID", 
@@ -65,7 +65,7 @@ export default function Home() {
         <table>
           <tbody>
             <tr>
-              {Object.keys(tableData[0]).map((e, idx) => {
+              {Object.keys(tableData.length > 0 ? tableData[0] : {}).map((e, idx) => {
                 return <th className="border-2 border-slate-800 p-1"key={idx}>{prop_map[e]}</th>
               })}
             </tr>

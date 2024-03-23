@@ -26,6 +26,7 @@ export default function Form({ date1, date2, setDate1, setDate2, categories, set
   const getTable = async (body) => {
     let res = await axios.post("http://localhost:8000/getTableData", body);
     console.log(res);
+    res.data.sort((a,b) => new Date(a.order_date) - new Date(b.order_date))
     return res.data;
   }
   const handleGetDB = () => {
@@ -39,7 +40,7 @@ export default function Form({ date1, date2, setDate1, setDate2, categories, set
       "minDate": date1,
       "maxDate": date2,
       "categories": catArr,
-      "minimumTotal": minimumTotal=== ""? 0 :minimumTotal
+      "minimumTotal": minimumTotal === "" ? 0 : minimumTotal
     };
     getFromDB(body).then(d => {
       getTable(body).then(t => {
@@ -75,6 +76,7 @@ export default function Form({ date1, date2, setDate1, setDate2, categories, set
           onClick={() => {
             if(date1 > date2){
               alert("Make sure from date is before to date.");
+              return;
             }
             handleGetDB();
           }}

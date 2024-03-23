@@ -49,6 +49,7 @@ app.post('/getChartInfo', async(req, res) => {
 app.post('/getTableData', async (req, res) => {
     let body = req.body;
     console.log(body);
+    
     let query = 
     `SELECT 
     o.orderid AS order_id, 
@@ -69,7 +70,7 @@ app.post('/getTableData', async (req, res) => {
     ON e.employeeid = o.employeeid
     ${body.minDate !== "" && body.maxDate !== "" 
     ? `WHERE orderDate BETWEEN '${req.body.minDate}' AND '${req.body.maxDate}';`: ";"}`
-    let offset = new Date(Date.now()).getTimezoneOffset() * 60;
+
     let result = await db.query(query);
     let rows = body.categories.length > 0 ? result.rows.filter(ele => (body.categories.includes(ele.category) && ele.order_total >= body.minimumTotal))
                 : result.rows.filter(e => e.order_total >= body.minimumTotal);
