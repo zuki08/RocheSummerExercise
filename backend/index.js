@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("tiny"));
-app.use(cors({origin: process.env.REACT_URL || "http://localhost:3000"}));
+app.use(cors({origin: process.env.REACT_URL}));
 
 app.get('/', async(req, res) => {
     res.json({msg: "Up and Running"});
