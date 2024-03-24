@@ -12,7 +12,8 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [minimumTotal, setTotal] = useState("");
   const [data, setData] = useState({});
-  const [tableData, setTable] = useState([]);
+  const [tableData, setTable1] = useState([]);
+  const [userData, setUsers] = useState([]);
   
   let prop_map = {
     order_id: "Order ID", 
@@ -23,7 +24,8 @@ export default function Home() {
     order_total: "Order Total", 
     order_date: "Order Date",
     employeefirstname: "Employee First Name",
-    employeelastname: "Employee Last Name"
+    employeelastname: "Employee Last Name",
+    amountpurchased: "Amount Purchased"
   }
 
   return form ? (
@@ -41,7 +43,8 @@ export default function Home() {
           setTotal = {setTotal}
           setForm={setForm}
           setData={setData}
-          setTable={setTable}
+          setTable1={setTable1}
+          setUsers={setUsers}
         />
       </div>
     </div>
@@ -70,6 +73,29 @@ export default function Home() {
               })}
             </tr>
             {tableData.map((e, idx) => {
+              return (
+                <tr key={idx}>
+                  {Object.keys(e).map((key, val) => {
+                    return(
+                      <td className="border-2 border-slate-800 text-center" key={val+"s"}>{e[key]}</td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="bg-slate-200 items-center rounded-md">
+      <table>
+          <tbody>
+            <tr>
+              {Object.keys(userData.length > 0 ? userData[0] : {}).map((e, idx) => {
+                return <th className="border-2 border-slate-800 p-1"key={idx}>{prop_map[e]}</th>
+              })}
+            </tr>
+            {userData.map((e, idx) => {
               return (
                 <tr key={idx}>
                   {Object.keys(e).map((key, val) => {

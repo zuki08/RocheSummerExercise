@@ -5,7 +5,7 @@ import DatePicker from "./formComponents/datePicker.js";
 import Categories from "./formComponents/categoryPicker.js";
 import OrderMin from "./formComponents/orderMin.js";
 
-export default function Form({ date1, date2, setDate1, setDate2, categories, setCategories, minimumTotal, setTotal, setForm, setData, setTable }) {
+export default function Form({ date1, date2, setDate1, setDate2, categories, setCategories, minimumTotal, setTotal, setForm, setData, setTable1, setUsers }) {
   useEffect(() => {
     axios.get('http://localhost:8000/getCategories')
     .then(function (response) {
@@ -29,6 +29,11 @@ export default function Form({ date1, date2, setDate1, setDate2, categories, set
     res.data.sort((a,b) => new Date(a.order_date) - new Date(b.order_date))
     return res.data;
   }
+  const getUsers = async(body) => {
+    let res = await axios.post("http://localhost:8000/getCustomerInfo", body);
+    console.log(res);
+    return res.data;
+  }
   const handleGetDB = () => {
     let catArr = categories.reduce((acc, elem) => {
       if(elem.checked){
@@ -44,13 +49,23 @@ export default function Form({ date1, date2, setDate1, setDate2, categories, set
     };
     getFromDB(body).then(d => {
       getTable(body).then(t => {
-        setData(d);
-        t.map(e => {
-          e.order_date = new Date(e.order_date).toDateString();
-          return e;
+        getUsers(body).then(u => {
+          setData(d);
+          t = t.map(e => {
+            e.order_date = new Date(e.order_date).toDateString();
+            return e;
+          })
+          setTable1(t);
+          u = u.map(e => {
+            return {
+              customerfirstname: e.customerfirstname, 
+              customerlastname: e.customerlastname, 
+              amountpurchased: e.amountpurchased
+            }
+          });
+          setUsers(u);
+          setForm(false);
         })
-        setTable(t);
-        setForm(false);
       });
     })
     .catch(err => console.error(err));
@@ -76,6 +91,8 @@ export default function Form({ date1, date2, setDate1, setDate2, categories, set
           onClick={() => {
             if(date1 > date2){
               alert("Make sure from date is before to date.");
+              setDate1("");
+              setDate2("");
               return;
             }
             handleGetDB();

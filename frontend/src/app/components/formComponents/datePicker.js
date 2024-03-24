@@ -16,7 +16,13 @@ export default function DatePicker({ date1, date2, setDate1, setDate2 }) {
           value={date1}
           max={tDate}
           onChange={(e) => {
+            if(e.target.value > tDate){
+              alert("Cannot choose a date has not occurred yet.");
+              setDate1("");
+              return;
+            }
             setDate1(e.target.value);
+            setDate2(tDate);
           }}
           // onKeyDown={(e) => {
           //   e.preventDefault();
@@ -31,6 +37,11 @@ export default function DatePicker({ date1, date2, setDate1, setDate2 }) {
           max={tDate}
           value={date2}
           onChange={(e) => {
+            if(e.target.value > tDate){
+              alert("Cannot choose a date has not occurred yet.");
+              setDate1("");
+              return;
+            }
             setDate2(e.target.value);
           }}
           // onKeyDown={(e) => {
