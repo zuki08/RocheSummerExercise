@@ -7,7 +7,7 @@ import OrderMin from "./FormComponents/orderMin";
 
 export default function Form({ date1, date2, setDate1, setDate2, categories, setCategories, minimumTotal, setTotal, setForm, setData, setTable }) {
   useEffect(() => {
-    axios.get('http://localhost:8000/getCategories')
+    axios.get('https://roche-backend.vercel.app/getCategories')
     .then(function (response) {
         setCategories(response.data.map(e => {
             return {name:e, checked:false};
@@ -19,12 +19,12 @@ export default function Form({ date1, date2, setDate1, setDate2, categories, set
   }, []);
 
   const getFromDB = async (body) => {
-    let res = await axios.post("http://localhost:8000/getChartInfo", body);
+    let res = await axios.post("https://roche-backend.vercel.app/getChartInfo", body);
     console.log(res);
     return res.data;
   }
   const getTable = async (body) => {
-    let res = await axios.post("http://localhost:8000/getTableData", body);
+    let res = await axios.post("https://roche-backend.vercel.app/getTableData", body);
     console.log(res);
     res.data.sort((a,b) => new Date(a.order_date) - new Date(b.order_date))
     return res.data;
