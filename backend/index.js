@@ -5,7 +5,7 @@ const db = require('./dbConnect.js');
 const port = 8000;
 
 const app = express();
-// db.connect().then(() => console.log("Connected!")).catch((err) => console.error(err));
+db.connect().then(() => console.log("Connected!")).catch((err) => console.error(err));
 
 app.use(express.json());
 app.use(morgan("tiny"));
@@ -16,9 +16,7 @@ app.get('/', async(req, res) => {
 })
 
 app.get('/getCategories', async(req, res) => {
-    let client = await db.connect();
-    let result = await client.query(`SELECT DISTINCT category FROM public.products ORDER BY category ASC;`);
-    client.release();
+    let result = await db.query(`SELECT DISTINCT category FROM public.products ORDER BY category ASC;`);
     let data = result.rows;
     data = data.reduce((acc, ele) => {
         acc.push(ele.category);
@@ -28,8 +26,6 @@ app.get('/getCategories', async(req, res) => {
 });
 
 app.post('/getChartInfo', async(req, res) => {
-    let client = await db.connect();
-    // console.log(req.body);
     let query = (req.body.minDate !== "" && req.body.maxDate != "") ?
         `SELECT category, SUM(ordertotal) as total 
         FROM orders AS o 
@@ -45,8 +41,7 @@ app.post('/getChartInfo', async(req, res) => {
         ON o.productid = p.productid 
         WHERE orderTotal >= ${req.body.minimumTotal}
         GROUP BY category;`
-    let result = await client.query(query);
-    client.release();
+    let result = await db.query(query);
     let retVal = req.body.categories.length > 0 ? result.rows.filter(e => req.body.categories.includes(e.category))
                     : result.rows;
     res.send(retVal)
@@ -54,8 +49,6 @@ app.post('/getChartInfo', async(req, res) => {
 
 app.post('/getTableData', async (req, res) => {
     let body = req.body;
-    // console.log(body);
-    let client = await db.connect();
     let query = 
     `SELECT 
     o.orderid AS order_id, 
@@ -77,8 +70,7 @@ app.post('/getTableData', async (req, res) => {
     ${body.minDate !== "" && body.maxDate !== "" 
     ? `WHERE orderDate BETWEEN '${req.body.minDate}' AND '${req.body.maxDate}';`: ";"}`
 
-    let result = await client.query(query);
-    client.release();
+    let result = await db.query(query);
     let rows = body.categories.length > 0 ? result.rows.filter(ele => (body.categories.includes(ele.category) && ele.order_total >= body.minimumTotal))
                 : result.rows.filter(e => e.order_total >= body.minimumTotal);
     res.send(rows);

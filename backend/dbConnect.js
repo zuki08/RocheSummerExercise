@@ -1,10 +1,10 @@
-const { Pool } = require("pg");
+const { Client } = require("pg");
 require('dotenv').config();
-const cli = new Pool({
-    user: 'postgres.zrpteuimmhssomhiwdvu',
-    host: 'aws-0-us-east-1.pooler.supabase.com',
-    database: "postgres",
-    password: process.env.db_Pass,
+const cli = new Client({
+    user: 'postgres',
+    host: '127.0.0.1',
+    database: "roche",
+    password: "postgres",
     port: 5432,
 });
  
