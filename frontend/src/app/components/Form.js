@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import axios from "axios";
 
-import DatePicker from "./FormComponents/datePicker";
-import Categories from "./FormComponents/categoryPicker";
-import OrderMin from "./FormComponents/orderMin";
+import DatePicker from "./FormComponents/datePicker.js";
+import Categories from "./FormComponents/categoryPicker.js";
+import OrderMin from "./FormComponents/orderMin.js";
 
 export default function Form({ date1, date2, setDate1, setDate2, categories, setCategories, minimumTotal, setTotal, setForm, setData, setTable }) {
   useEffect(() => {

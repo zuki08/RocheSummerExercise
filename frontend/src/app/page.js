@@ -1,7 +1,7 @@
 'use client'
-import Form from "./components/Form";
-import Header from "./components/Header";
-import Chart from "./components/Report";
+import Form from "./components/Form.js";
+import Header from "./components/Header.js";
+import Chart from "./components/Report.js";
 
 import { useState } from "react";
 

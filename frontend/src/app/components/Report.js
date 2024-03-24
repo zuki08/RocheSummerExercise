@@ -1,4 +1,4 @@
-import BarChart from "./Chart";
+import BarChart from "./Chart.js";
 
 export default function Chart ( {data} ) {
     console.log(data);
