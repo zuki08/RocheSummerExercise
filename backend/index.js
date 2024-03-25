@@ -19,14 +19,14 @@ app.get("/", async (req, res) => {
 
 app.get("/getCategories", async (req, res) => {
   let result = await db.query(
-    `SELECT DISTINCT category FROM public.products ORDER BY category ASC;`
+    `SELECT DISTINCT category FROM products ORDER BY category ASC;`
   );
   let data = result.rows;
   data = data.reduce((acc, ele) => {
     acc.push(ele.category);
     return acc;
   }, []);
-
+//   data.push("test");
   res.send(data);
 });
 
