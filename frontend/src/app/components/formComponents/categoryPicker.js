@@ -1,4 +1,6 @@
+//module function export. JSX
 export default function Categories({categories, setCategories}){
+    //updating the checked categories for easy compiling into the array for POST request.
     const handleCheck = (n) => {
         let newList = categories.map(e => {
             if(e.name === n){
@@ -6,12 +8,15 @@ export default function Categories({categories, setCategories}){
             }
             return e;
         })
+        //updateing status
         setCategories(newList);
     }
     return(
         <div className="mx-3">
+            {/* Displaying the list with checkboxes */}
             <p>Filter categories: </p>
             <ul className="flex flex-row flex-wrap">
+                {/* Mapping through the list */}
                 {categories.map((e, idx) => {
                     return(
                         <li className="mx-2" key={idx}>

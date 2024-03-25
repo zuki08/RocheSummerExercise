@@ -1,13 +1,19 @@
+//postgres driver import
 const { Client } = require("pg");
+
+//setting up the environment variables;
 require('dotenv').config();
+
+//Creating the client for export to index.js
 const cli = new Client({
-    user: 'postgres',
-    host: '127.0.0.1',
-    database: "roche",
-    password: "postgres",
+    user: process.env.user,
+    host: process.env.host,
+    database: process.env.database,
+    password: process.env.password,
     port: 5432,
 });
- 
+
+//exporting the module
 module.exports = cli;
 
 

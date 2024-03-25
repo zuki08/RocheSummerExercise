@@ -85,7 +85,7 @@ ALTER TABLE public.products OWNER TO jeff;
 --
 
 COPY public.customers (customerid, firstname, lastname, birthdate, phonenumber, amountpurchased) FROM stdin;
-M232	Adam	T	2001-03-24	555-1234	0
+M232	Adam	B	2001-03-24	555-1234	0
 \.
 
 

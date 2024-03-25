@@ -1,7 +1,8 @@
+//component import.
 import BarChart from "./Chart.js";
 
 export default function Chart ( {data} ) {
-    console.log(data);
+    //Splitting the data into categories and total arrays to be rendered.
     let categories = [];
     let totals = [];
     data.forEach(e => {

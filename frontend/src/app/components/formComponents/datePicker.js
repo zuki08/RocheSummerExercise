@@ -1,14 +1,18 @@
+//module export.
 export default function DatePicker({ date1, date2, setDate1, setDate2 }) {
   let res = new Date();
+  //quick little variable that helps clamp the max date.
   let tDate = `${res.getFullYear()}-${("" + (res.getMonth() + 1)).padStart(
     2,
     0
   )}-${res.getDate()}`;
+  //Component return for render.
   return (
     <div className="mx-3 my-5">
       <p className="mb-2">Order date range:</p>
       <div className="ml-2 flex flex-row">
         <label>From:</label>
+        {/* date1 input */}
         <input
           name="date1"
           type="date"
@@ -23,9 +27,6 @@ export default function DatePicker({ date1, date2, setDate1, setDate2 }) {
             }
             setDate1(e.target.value);
           }}
-          // onKeyDown={(e) => {
-          //   e.preventDefault();
-          // }}
         />
         <label className="mx-1">To:</label>
         <input
@@ -36,6 +37,7 @@ export default function DatePicker({ date1, date2, setDate1, setDate2 }) {
           max={tDate}
           value={date2}
           onChange={(e) => {
+            //date2 input.
             if(e.target.value > tDate){
               alert("Cannot choose a date has not occurred yet.");
               setDate1("");
@@ -44,9 +46,6 @@ export default function DatePicker({ date1, date2, setDate1, setDate2 }) {
             }
             setDate2(e.target.value);
           }}
-          // onKeyDown={(e) => {
-          //   e.preventDefault();
-          // }}
         />
       </div>
     </div>

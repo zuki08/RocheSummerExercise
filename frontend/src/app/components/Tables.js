@@ -1,4 +1,5 @@
 export default function Tables({ data }) {
+  //A map that maps the db column to a more professional table column headers.
   let prop_map = {
     order_id: "Order ID",
     customerfirstname: "Customer First Name",
@@ -17,6 +18,7 @@ export default function Tables({ data }) {
         <tbody>
           <tr>
             {Object.keys(data.length > 0 ? data[0] : {}).map((e, idx) => {
+              //loading the headers.
               return (
                 <th className="border-2 border-slate-800 p-1" key={idx}>
                   {prop_map[e]}
@@ -28,6 +30,7 @@ export default function Tables({ data }) {
             return (
               <tr key={idx}>
                 {Object.keys(e).map((key, val) => {
+                  //loading the table
                   return (
                     <td
                       className="border-2 border-slate-800 text-center"

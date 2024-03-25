@@ -1,22 +1,42 @@
+/*
+ * The Library imports for the server using Express.
+ */
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const db = require("./dbConnect.js");
 const port = 8000;
 
+/*
+ * Basic setting up with the respect to the server.
+ */
 const app = express();
+
+/*
+ * Connecting to the database.
+ */
 db.connect()
   .then(() => console.log("Connected!"))
   .catch((err) => console.error(err));
 
+
+/*
+ * Middleware that the app uses to preprocess requests.
+ */
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(cors({ origin: process.env.REACT_URL }));
 
+/*
+ * A normal request to make sure everything is up and running. 
+ */
 app.get("/", async (req, res) => {
   res.json({ msg: "Up and Running" });
 });
 
+/*
+ * The request to get all the unique categories for the form's category filter. 
+ */
 app.get("/getCategories", async (req, res) => {
   let result = await db.query(
     `SELECT DISTINCT category FROM products ORDER BY category ASC;`
@@ -26,10 +46,13 @@ app.get("/getCategories", async (req, res) => {
     acc.push(ele.category);
     return acc;
   }, []);
-//   data.push("test");
+
   res.send(data);
 });
 
+/*
+ * Getting information in a specific format that the Chart component will use to render the chart. 
+ */
 app.post("/getChartInfo", async (req, res) => {
   let query =
     req.body.minDate !== "" && req.body.maxDate != ""
@@ -47,13 +70,18 @@ app.post("/getChartInfo", async (req, res) => {
         WHERE orderTotal >= ${req.body.minimumTotal}
         GROUP BY category;`;
   let result = await db.query(query);
+  //Quick filtering for returning only the info for the selected categories.
   let retVal =
     req.body.categories.length > 0
       ? result.rows.filter((e) => req.body.categories.includes(e.category))
       : result.rows;
+  //Sending the response.
   res.send(retVal);
 });
 
+/*
+ * Getting the data in the form that the table component will parse and render. 
+ */
 app.post("/getTableData", async (req, res) => {
   let body = req.body;
   let query = `SELECT 
@@ -91,6 +119,9 @@ app.post("/getTableData", async (req, res) => {
   res.send(rows);
 });
 
+/*
+ * Getting the information with respect to the customer. 
+ */
 app.post("/getCustomerInfo", async (req, res) => {
   let body = req.body;
   let query = `SELECT 
@@ -114,6 +145,7 @@ app.post("/getCustomerInfo", async (req, res) => {
     }
     GROUP BY (cid, category);`;
   let result = await db.query(query);
+  //Filtering by category first.
   let data =
     body.categories.length > 0
       ? result.rows.filter(
@@ -121,6 +153,8 @@ app.post("/getCustomerInfo", async (req, res) => {
             body.categories.includes(ele.category)
         )
       : result.rows
+
+  //Formatting for easier parsing on the client.
   let toSend = data.reduce((acc, elem) => {
     let val = acc.filter((e) => e.cid == elem.cid);
     if (val.length > 0) {
@@ -138,10 +172,12 @@ app.post("/getCustomerInfo", async (req, res) => {
   res.send(toSend);
 });
 
+//port listening.
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
 
+//If CTRL+C, end the db connection before exiting.
 process.on("SIGINT", () => {
   db.end()
     .then(() => {
@@ -150,13 +186,3 @@ process.on("SIGINT", () => {
     })
     .catch((err) => console.error(err));
 });
-
-// o.orderid AS "Order ID",
-// c.firstname AS "Customer First Name",
-// c.lastname AS "Customer Last Name",
-// p.productname AS "Product Name",
-// p.category AS "Category",
-// o.orderTotal AS "Order Total",
-// o.orderDate AS "Order Date",
-// e.firstname AS "Employee First Name",
-// e.lastname AS "Employee Last Name"

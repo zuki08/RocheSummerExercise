@@ -1,6 +1,7 @@
-
+//Module export
 export default function Header(){
     return (
+        //Instructions for how to interact with the UI
         <div>
             <div className="text-center">
                 <h1 className="text-[20px]">Report generation</h1>

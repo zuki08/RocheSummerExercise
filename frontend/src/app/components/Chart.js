@@ -1,3 +1,4 @@
+//Library imports.
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -8,7 +9,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+
+
 export default function BarChart({categories, totals}) {
+  //registering the components.
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -17,6 +21,7 @@ export default function BarChart({categories, totals}) {
     Tooltip,
     Legend
   );
+  //creating the graph data used for rendering.
   const data = {
     labels: categories,
     datasets: [
@@ -30,7 +35,7 @@ export default function BarChart({categories, totals}) {
       },
     ],
   };
-
+  // some setting options.
   const options = {
     responsive: true,
     scales: {
@@ -39,7 +44,7 @@ export default function BarChart({categories, totals}) {
       }
     }
   };
-
+  //returning the chart.
   return (
     <div>
         <h3>Order total per Category</h3>
