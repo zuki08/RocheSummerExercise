@@ -4,6 +4,7 @@ import Header from "./components/Header.js";
 import Chart from "./components/Report.js";
 
 import { useState } from "react";
+import Tables from "./components/Tables.js";
 
 export default function Home() {
   const [form, setForm] = useState(true);
@@ -15,18 +16,7 @@ export default function Home() {
   const [tableData, setTable1] = useState([]);
   const [userData, setUsers] = useState([]);
   
-  let prop_map = {
-    order_id: "Order ID", 
-    customerfirstname: "Customer First Name", 
-    customerlastname: "Customer Last Name", 
-    product_name: "Product Name", 
-    category: "Category",
-    order_total: "Order Total", 
-    order_date: "Order Date",
-    employeefirstname: "Employee First Name",
-    employeelastname: "Employee Last Name",
-    amountpurchased: "Amount Purchased"
-  }
+  
 
   return form ? (
     <div className="h-screen bg-blue-400 flex items-center justify-center">
@@ -64,51 +54,8 @@ export default function Home() {
           Generate Another Report?
         </button>
       </div>
-      <div className="my-5 bg-slate-200 item-center rounded-md">
-        <table>
-          <tbody>
-            <tr>
-              {Object.keys(tableData.length > 0 ? tableData[0] : {}).map((e, idx) => {
-                return <th className="border-2 border-slate-800 p-1"key={idx}>{prop_map[e]}</th>
-              })}
-            </tr>
-            {tableData.map((e, idx) => {
-              return (
-                <tr key={idx}>
-                  {Object.keys(e).map((key, val) => {
-                    return(
-                      <td className="border-2 border-slate-800 text-center" key={val+"s"}>{e[key]}</td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="bg-slate-200 items-center rounded-md">
-      <table>
-          <tbody>
-            <tr>
-              {Object.keys(userData.length > 0 ? userData[0] : {}).map((e, idx) => {
-                return <th className="border-2 border-slate-800 p-1"key={idx}>{prop_map[e]}</th>
-              })}
-            </tr>
-            {userData.map((e, idx) => {
-              return (
-                <tr key={idx}>
-                  {Object.keys(e).map((key, val) => {
-                    return(
-                      <td className="border-2 border-slate-800 text-center" key={val+"s"}>{e[key]}</td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+      <Tables data={tableData} />
+      <Tables data={userData} />
     </div>
   );
 }

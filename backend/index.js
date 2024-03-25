@@ -26,6 +26,7 @@ app.get("/getCategories", async (req, res) => {
     acc.push(ele.category);
     return acc;
   }, []);
+
   res.send(data);
 });
 
@@ -97,7 +98,7 @@ app.post("/getCustomerInfo", async (req, res) => {
     c.firstname AS customerFirstName, 
     c.lastname AS customerLastName, 
     p.category AS category,
-    SUM(o.orderTotal) AS order_total 
+    SUM(o.orderTotal) AS category_total 
     FROM orders AS o
     INNER JOIN customers AS c
     ON o.customerid = c.customerid
@@ -105,9 +106,10 @@ app.post("/getCustomerInfo", async (req, res) => {
     ON o.productid = p.productid
     INNER JOIN employees AS e
     ON e.employeeid = o.employeeid
+    WHERE o.orderTotal > ${body.minimumTotal}
     ${
       body.minDate !== "" && body.maxDate !== ""
-        ? `WHERE orderDate BETWEEN '${body.minDate}' AND '${body.maxDate}'`
+        ? `AND orderDate BETWEEN '${body.minDate}' AND '${body.maxDate}'`
         : ""
     }
     GROUP BY (cid, category);`;
@@ -116,20 +118,19 @@ app.post("/getCustomerInfo", async (req, res) => {
     body.categories.length > 0
       ? result.rows.filter(
           (ele) =>
-            body.categories.includes(ele.category) &&
-            ele.order_total >= body.minimumTotal
+            body.categories.includes(ele.category)
         )
-      : result.rows.filter((e) => e.order_total >= body.minimumTotal);
+      : result.rows
   let toSend = data.reduce((acc, elem) => {
     let val = acc.filter((e) => e.cid == elem.cid);
     if (val.length > 0) {
-      val[0].amountpurchased += elem.order_total;
+      val[0].amountpurchased += elem.category_total;
     } else {
       acc.push({
         cid: elem.cid,
         customerfirstname: elem.customerfirstname,
         customerlastname: elem.customerlastname,
-        amountpurchased: elem.order_total,
+        amountpurchased: elem.category_total,
       });
     }
     return acc;
